@@ -1,15 +1,15 @@
-import LoginForm from "../components/molecules/LoginForm/LoginForm";
+import SignUpForm from "../../components/molecules/SignUpForm/SignUpForm";
 
-const LoginPage = () => {
+const SignUpPage = () => {
   return (
     <>
       <main className="h-screen flex items-center">
         <div className="container flex-1 mx-auto ">
-          <LoginForm />
+          <SignUpForm />
         </div>
       </main>
     </>
   );
 };
 
-export default LoginPage;
+export default SignUpPage;
