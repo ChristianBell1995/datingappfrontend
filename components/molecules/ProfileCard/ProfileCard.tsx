@@ -4,14 +4,21 @@ import { useState } from "react";
 import { Profile } from "../../../api/hooks/useProfiles";
 import useSwipeMutation from "../../../api/hooks/useSwipeMutation";
 import { useAppContext } from "../../../contexts/AppContext";
+import SuccessfulMatchCard from "../SuccessfulMatchCard/SuccessfulMatchCard";
 
-const ProfileCard = ({ profiles }: { profiles: Profile[] }) => {
-  const [profilesIndex, setProfilesIndex] = useState(0);
-  const [currentProfile, setCurrentProfile] = useState(profiles[profilesIndex]);
-  const [thereIsAMatch, setThereIsAMatch] = useState(false);
+interface ProfileCardProps {
+  profiles: Profile[];
+}
+
+const ProfileCard = ({ profiles }: ProfileCardProps) => {
   const { push } = useRouter();
   const swipeMutation = useSwipeMutation();
   const { getUserID } = useAppContext();
+
+  const [profilesIndex, setProfilesIndex] = useState(0);
+  const [currentProfile, setCurrentProfile] = useState(profiles[profilesIndex]);
+  const [thereIsAMatch, setThereIsAMatch] = useState(false);
+
   const onSwipe = (preference: "YES" | "NO") => {
     swipeMutation.mutate(
       {
@@ -21,50 +28,53 @@ const ProfileCard = ({ profiles }: { profiles: Profile[] }) => {
       },
       {
         onSuccess: (data) => {
-          if (data.data.match) {
+          const newIndex = profilesIndex + 1;
+          if (!!data.data.match) {
             setThereIsAMatch(true);
             setTimeout(() => {
+              setCurrentProfile(profiles[newIndex]);
+              setProfilesIndex(newIndex);
               setThereIsAMatch(false);
-            }, 1000);
+            }, 2000);
+            return;
           }
-          const newIndex = profilesIndex + 1;
           if (newIndex > profiles.length - 1) {
             push("/profiles/empty");
-          } else {
-            setCurrentProfile(profiles[newIndex]);
-            setProfilesIndex(newIndex);
+            return;
           }
+
+          setCurrentProfile(profiles[newIndex]);
+          setProfilesIndex(newIndex);
         },
       }
     );
   };
   return (
     <>
-      {!thereIsAMatch ? (
-        <>
-          <div className="flex flex-col bg-white rounded-lg shadow-lg overflow-hidden">
-            <div className="relative pb-5/6">
+      <div className="h-full border border-grey flex flex-col bg-white rounded-3xl shadow-lg overflow-hidden">
+        {!thereIsAMatch ? (
+          <>
+            <div className="relative h-full ">
               <Image
                 src={currentProfile.imageUrl}
-                alt="American Express logo"
-                height={100}
-                width={100}
+                alt="Profile Image"
+                fill={true}
+                style={{ objectFit: "cover" }}
               />
             </div>
-            <div className="p-6">
+            <div className="px-4 py-2">
               <div className="flex items-center">
-                <Image
-                  src={currentProfile.imageUrl}
-                  alt="American Express logo"
-                  height={50}
-                  width={50}
-                />
                 <div className="text-lg font-bold">{currentProfile.name}</div>
               </div>
-              <p className="text-gray-700 mt-2">{currentProfile.age}</p>
-              <p className="text-gray-700 mt-2">{currentProfile.gender}</p>
+              <p className="text-gray-700 mt-1">
+                Gender:{" "}
+                <span className="font-bold"> {currentProfile.gender}</span>
+              </p>
+              <p className="text-gray-700 mt-1">
+                Age: <span className="font-bold"> {currentProfile.age}</span>
+              </p>
             </div>
-            <div className="px-6 py-4 flex justify-between items-center">
+            <div className="px-4 pb-4 pt-0 flex justify-between items-center">
               <button
                 className="text-xs font-bold tracking-wide uppercase bg-red-500 text-white rounded-full py-3 px-4"
                 onClick={() => onSwipe("NO")}
@@ -78,11 +88,11 @@ const ProfileCard = ({ profiles }: { profiles: Profile[] }) => {
                 Like
               </button>
             </div>
-          </div>
-        </>
-      ) : (
-        <p>There is a match</p>
-      )}
+          </>
+        ) : (
+          <SuccessfulMatchCard name={currentProfile.name} />
+        )}
+      </div>
     </>
   );
 };

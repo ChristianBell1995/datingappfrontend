@@ -23,9 +23,11 @@ export const useProfiles = () => {
   return useQuery(
     ["profiles"],
     async () => {
-      return await axios.get<ProfileResponse>(`${BASE_URL}/profiles`, {
-        headers: { Authorization: "Bearer " + accessToken },
-      });
+      return await axios
+        .get<ProfileResponse>(`${BASE_URL}/profiles`, {
+          headers: { Authorization: "Bearer " + accessToken },
+        })
+        .then((res) => res.data);
     },
     {
       enabled: !!accessToken,

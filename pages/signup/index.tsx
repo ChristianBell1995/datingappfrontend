@@ -1,14 +1,13 @@
+import HeaderText from "../../components/atoms/HeaderText/HeaderText";
 import SignUpForm from "../../components/molecules/SignUpForm/SignUpForm";
+import LoggedOutLayout from "../../components/organisms/LoggedOutLayout/LoggedOutLayout";
 
 const SignUpPage = () => {
   return (
-    <>
-      <main className="h-screen flex items-center">
-        <div className="container flex-1 mx-auto ">
-          <SignUpForm />
-        </div>
-      </main>
-    </>
+    <LoggedOutLayout
+      header={<HeaderText text={"Sign up"} />}
+      content={<SignUpForm />}
+    />
   );
 };
 

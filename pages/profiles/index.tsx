@@ -1,23 +1,22 @@
 import useProfiles from "../../api/hooks/useProfiles";
 import ProfileCard from "../../components/molecules/ProfileCard/ProfileCard";
+import LoggedInLayout from "../../components/organisms/LoggedInLayout/LoggedInLayout";
 
 const ProfilesPage = () => {
   const profileQuery = useProfiles();
 
-  if (profileQuery.isLoading) {
-    return <p>Loading your matches...</p>;
-  }
-
-  if (profileQuery.isError) {
-    return <p>Something went wrong :(</p>;
-  }
-
   return (
-    <div>
-      {profileQuery?.isSuccess && (
-        <ProfileCard profiles={profileQuery?.data?.data?.data} />
-      )}
-    </div>
+    <LoggedInLayout
+      content={
+        <>
+          {profileQuery?.isLoading && <p>Loading your matches...</p>}
+          {profileQuery?.isError && <p>Something went wrong :(</p>}
+          {profileQuery?.isSuccess && (
+            <ProfileCard profiles={profileQuery?.data?.data} />
+          )}
+        </>
+      }
+    />
   );
 };
 

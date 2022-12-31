@@ -1,14 +1,13 @@
+import HeaderText from "../components/atoms/HeaderText/HeaderText";
 import LoginForm from "../components/molecules/LoginForm/LoginForm";
+import LoggedOutLayout from "../components/organisms/LoggedOutLayout/LoggedOutLayout";
 
 const LoginPage = () => {
   return (
-    <>
-      <main className="h-screen flex items-center">
-        <div className="container flex-1 mx-auto ">
-          <LoginForm />
-        </div>
-      </main>
-    </>
+    <LoggedOutLayout
+      header={<HeaderText text={"Muzz Match"} />}
+      content={<LoginForm />}
+    />
   );
 };
 

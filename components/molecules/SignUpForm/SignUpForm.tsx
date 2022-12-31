@@ -7,6 +7,7 @@ import useSignUpMutation, {
 import { ErrorMessageInterface } from "../../../utils/errorMessageInterface";
 import Button from "../../atoms/Button/Button";
 import ErrorMessage from "../../atoms/ErrorMessage/ErrorMessage";
+import FormContainer from "../../atoms/FormContainer/FormContainer";
 import Input from "../../atoms/Input/Input";
 
 const SignUpForm = () => {
@@ -50,7 +51,7 @@ const SignUpForm = () => {
   };
 
   return (
-    <div className="bg-white border-solid border-2 border-grey shadow-lg rounded px-8 pt-6 pb-8 mb-4 sm:px-12 sm:pt-8 sm:pb-10 sm:mb-6 lg:px-16 lg:pt-10 lg:pb-12 lg:mb-8">
+    <FormContainer>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Input
           label="Name"
@@ -111,7 +112,7 @@ const SignUpForm = () => {
           </Link>
         </div>
       </form>
-    </div>
+    </FormContainer>
   );
 };
 
